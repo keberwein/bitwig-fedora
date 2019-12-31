@@ -1,29 +1,19 @@
 #!/bin/bash
 #=============================================================================
 #
-# FILE: bitwig-fedora.sh
+# FILE: bitwig-fedora.sh 
 #
 # USAGE: bitwig-fedora.sh [-i|-u] [-h]
 #
-# DESCRIPTION: This script automates the Bitwig Studio installation process on
-# Fedora 28.
-# The default starting directory is the current directory.
-# Do not descend directories on other filesystems.
-#
-# OPTIONS: See function - usage - below.
-# REQUIREMENTS: Fedora 28 Workstation, Bitwig Studio 2.4
-# NOTES: ---
 #=============================================================================
 
 ROOT_UID=0
 E_NOTROOT=87
-VERSION=2.4
+VERSION=3.0.2
 DEFAULT_FILENAME="bitwig-studio-$VERSION.deb"
 DEFAULT_URL="https://downloads.bitwig.com/stable/$VERSION/$DEFAULT_FILENAME"
 INSTALL_LOG="/opt/bitwig-studio/.$DEFAULT_FILENAME.log"
 SAFE_FILE_REMOVE="^/\./usr/share/*|^/\./opt/bitwig-studio/*"
-SHA256="849c5c74902421f1c901be1d0216be8909d488bbdaeec2f5c56cc8c5b94048d9"
-OS_VERSION="Fedora release 28 (Twenty Eight)"
 
 
 #=== FUNCTION ================================================================
@@ -50,16 +40,9 @@ function download_bitwig()
   if [ -f $DEFAULT_FILENAME ] ; then
     echo "Package $DEFAULT_FILENAME already exists."
   else
-    echo "Package $DEFAULT_FILENAME does not exist. Initializing the download."
-    wget $DEFAULT_URL
-  fi
-
-  echo "Verifying the package checksum. Please wait."
-  if [ "$(sha256sum $DEFAULT_FILENAME | awk {'print $1'})" != "$SHA256" ] ; then
-    echo "The checksum doesn't match. Please remove or download the package again."
-    exit 1
-  else
-    echo "Package checksum successfully validated."
+    #echo "Package $DEFAULT_FILENAME does not exist. Initializing the download."
+    #wget $DEFAULT_URL
+    echo "Dep package doesn't exist."
   fi
 }
 
@@ -174,11 +157,6 @@ function uninstall()
 
 
 #=== MAIN ====================================================================
-if [ "$(cat /etc/fedora-release)" != "$OS_VERSION" ] ; then
-  echo "Wrong OS version. Make sure you run the script in - $OS_VERSION -."
-  exit 1
-fi
-
 if [ "$UID" -ne "$ROOT_UID" ]; then
   echo "You must be root to run this script."
   exit $E_NOTROOT
